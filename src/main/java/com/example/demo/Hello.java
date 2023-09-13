@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Named;
 
@@ -12,6 +13,7 @@ public class Hello {
 
     public void createMessage() {
         message = "Hello, " + name + "!";
+        //initInternal();
     }
 
     public String getName() {
@@ -26,4 +28,9 @@ public class Hello {
         return message;
     }
 
+    @PostConstruct
+    private final void initInternal()
+    {
+        System.out.println("!!!!!initInternal Hello");;
+    }
 }

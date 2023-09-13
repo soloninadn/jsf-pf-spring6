@@ -5,12 +5,211 @@
         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
         version="6.0"
 >
+
+    <display-name>Compliance Portal</display-name>
+    <context-param>
+        <param-name>com.sun.faces.enableMissingResourceLibraryDetection</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jakarta.faces.FACELETS_SKIP_COMMENTS</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jakarta.faces.PROJECT_STAGE</param-name>
+        <param-value>Development</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jakarta.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <!-- Current project stage. When it is set to 'Development' Primefaces give a lot of debug information on the screen. -->
+    <context-param>
+        <param-name>jakarta.faces.STATE_SAVING_METHOD</param-name>
+        <param-value>server</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.CLIENT_SIDE_VALIDATION</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <context-param>
+        <param-name>primefaces.THEME</param-name>
+        <param-value>none</param-value>
+    </context-param>
+    <context-param>
+        <param-name>jakarta.faces.DATETIMECONVERTER_DEFAULT_TIMEZONE_IS_SYSTEM_TIMEZONE</param-name>
+        <param-value>true</param-value>
+    </context-param>
+    <!-- This is read by JSF pages to conditionally show/hide features which are not yet implemented -->
+    <context-param>
+        <param-name>showPendingFeatures</param-name>
+        <param-value>false</param-value>
+    </context-param>
+    <context-param>
+        <param-name>contextClass</param-name>
+        <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+    </context-param>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>
+            com.example.demo.PortalConfig
+        </param-value>
+    </context-param>
+    <context-param>
+        <param-name>jakarta.faces.FACELETS_LIBRARIES</param-name>
+        <param-value>/WEB-INF/springsecurity.taglib.xml</param-value>
+    </context-param>
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+<!--    <listener>-->
+<!--        <listener-class>com.example.demo.PostProxyInvokerContextListener</listener-class>-->
+<!--    </listener>-->
+
+
+    <!-- Staring JSF -->
     <servlet>
-        <servlet-name>facesServlet</servlet-name>
+        <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
+    <!-- JSF URL mapping -->
     <servlet-mapping>
-        <servlet-name>facesServlet</servlet-name>
+        <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.xhtml</url-pattern>
     </servlet-mapping>
+    <session-config>
+        <!-- 30 minutes -->
+        <session-timeout>30</session-timeout>
+        <tracking-mode>COOKIE</tracking-mode>
+    </session-config>
+    <mime-mapping>
+        <extension>css</extension>
+        <mime-type>text/css</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>js</extension>
+        <mime-type>text/javascript</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>txt</extension>
+        <mime-type>text/plain</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>gif</extension>
+        <mime-type>image/gif</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jpeg</extension>
+        <mime-type>image/jpeg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>jpg</extension>
+        <mime-type>image/jpeg</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>png</extension>
+        <mime-type>image/png</mime-type>
+    </mime-mapping>
+    <mime-mapping>
+        <extension>xml</extension>
+        <mime-type>application/xml</mime-type>
+    </mime-mapping>
+    <resource-ref id="ResourceRef_56656815">
+        <description />
+        <res-ref-name>jdbc/cmc</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>
+
+    <welcome-file-list>
+        <!-- start here -->
+        <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
+    <error-page><!-- see de.bnext.compliance.portal.jsf.exception.PortalExceptionHandler -->
+        <exception-type>jakarta.faces.application.ViewExpiredException</exception-type>
+        <location>/index.xhtml</location>
+    </error-page>
+    <error-page>
+        <exception-type>com.sun.faces.context.FacesFileNotFoundException</exception-type>
+        <location>/portal/dashboard/dashboard.xhtml</location>
+    </error-page>
+    <error-page>
+        <exception-type>java.lang.Throwable</exception-type>
+        <location>/error.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>404</error-code>
+        <location>/index.xhtml</location>
+    </error-page>
+    <error-page>
+        <error-code>408</error-code>
+        <location>/index.xhtml</location>
+    </error-page>
+    <!-- Define a Security Constraint on this Application -->
+    <security-constraint>
+        <display-name>cmc-portal</display-name>
+        <web-resource-collection>
+            <web-resource-name>cmc-portal-user-area</web-resource-name>
+            <url-pattern>/portal/*</url-pattern>
+            <http-method>GET</http-method>
+            <http-method>POST</http-method>
+        </web-resource-collection>
+        <auth-constraint>
+            <!-- Roles allowed to enter portal -->
+            <role-name>CMC_PORTAL</role-name>
+            <role-name>CMC_PORTAL_ADMIN</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <!-- Define the Login Configuration for this Application -->
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>CMC:Compliance Portal</realm-name>
+        <form-login-config>
+            <form-login-page>/login.xhtml</form-login-page>
+            <form-error-page>/login.xhtml</form-error-page>
+        </form-login-config>
+    </login-config>
+    <!-- Security roles referenced by this web application -->
+    <security-role>
+        <description>The role that is required to log in to the COI Application</description>
+        <role-name>CMC_PORTAL</role-name>
+    </security-role>
+    <security-role>
+        <description>The role that is required to log in to the COI Application</description>
+        <role-name>CMC_PORTAL_ADMIN</role-name>
+    </security-role>
+    <!-- Dynamic Environment Entries -->
+    <env-entry>
+        <env-entry-name>PersistenceManager.class</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>de.bnext.persistence.manager.torque.TorquePersistenceManager</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>coi.delegate.coiMgr.class</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>de.bnext.persistence.delegate.coi.torque.TorqueCoiMgrDelegate</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>default.lang</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>en</env-entry-value>
+    </env-entry>
+    <env-entry>
+        <env-entry-name>macoc.version</env-entry-name>
+        <env-entry-type>java.lang.String</env-entry-type>
+        <env-entry-value>4.0.15</env-entry-value>
+    </env-entry>
+    <!--	<servlet>-->
+    <!--		<servlet-name>facesServlet</servlet-name>-->
+    <!--		<servlet-class>jakarta.faces.webapp.FacesServlet</servlet-class>-->
+    <!--	</servlet>-->
+    <!--	<servlet-mapping>-->
+    <!--		<servlet-name>facesServlet</servlet-name>-->
+    <!--		<url-pattern>*.xhtml</url-pattern>-->
+    <!--	</servlet-mapping>-->
 </web-app>
