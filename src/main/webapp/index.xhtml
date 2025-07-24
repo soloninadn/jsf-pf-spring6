@@ -1,21 +1,109 @@
 <!DOCTYPE html>
 <html lang="en"
 	  xmlns:f="jakarta.faces.core"
-	  xmlns:h="jakarta.faces.html">
+	  xmlns:h="jakarta.faces.html"
+	  xmlns:p="http://primefaces.org/ui"
+>
 <h:head>
 	<title>Hello, World!</title>
 </h:head>
 <h:body>
 	<h:form>
+		<h:commandButton value="Say hello" action="#{hello.createMessage}">
+			<f:ajax execute="@form" render="@form" />
+		</h:commandButton>
+		<p:commandButton id="editInsiderButton1"
+						 process="@this"
+						 update=":insiderChangeDialog"
+						 oncomplete="PF('winsiderChangeDialogVar').show()">
+			<p:resetInput target="insiderChangeDialog"/>
+		</p:commandButton>
 		<h:outputLabel for="name" value="Enter your name" required="true" />
 		<h:inputText id="name" value="#{hello.name}" />
 		<h:message for="name" />
 		<br />
-		<h:commandButton value="Say hello" action="#{hello.createMessage}">
-			<f:ajax execute="@form" render="@form" />
-		</h:commandButton>
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
+		<h:outputLabel value="Enter your name 222" />
+		<br />		<br />		<br />		<br />		<br />
 		<br />
 		#{hello.message}
 	</h:form>
+
+	<p:dialog id="insiderChangeDialog"
+			  appendTo="@(body)"
+			  header="Dialog Insider"
+			  widgetVar="winsiderChangeDialogVar" modal="true"
+			  resizable="false" width="500"
+			  style="position: absolute;">
+
+		<h:panelGroup layout="block">
+			<p:outputLabel for="validFrom" value="validFrom" />
+			<p:calendar id="validFrom"
+						value="#{hello.validFrom}"
+						widgetVar="validFromCalendarWidgetVar"
+						navigator="true"
+						showWeek="true"
+						mode="popup"
+						mask="true"
+						popupIconOnly="true"
+						showOn="both" required="false">
+				<p:ajax event="dateSelect" update="@this" global="false" />
+			</p:calendar>
+		</h:panelGroup>
+
+		<h:panelGroup  layout="block" >
+			<p:commandButton
+					id="changeButton"
+					value="change"
+					oncomplete="PF('winsiderChangeDialogVar').hide()" />
+			<p:commandButton
+					value="cancel"
+					onclick="PF('winsiderChangeDialogVar').hide()"
+					type="button" />
+		</h:panelGroup>
+
+	</p:dialog>
+
 </h:body>
 </html>
